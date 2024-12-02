@@ -18,18 +18,25 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [ 
-          pkgs.vim
+          pkgs.neovim
           pkgs.fzf
           pkgs.k9s
           pkgs.kubectl
           pkgs.kubectx
-          pkgs.lens
+          # pkgs.lens
+	        # pkgs.vscode
         ];
 
       homebrew = {
         enable = true;
         casks = [ 
-          # "firefox"
+            # "firefox"
+            "google-chrome"
+            "visual-studio-code"
+            "maccy"
+            "raycast"
+            "hiddenbar"
+            "itsycal"
         ];
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
@@ -41,14 +48,33 @@
       
 
       system.defaults = {
-        dock.autohide = true;
-        dock.orientation = "left";
-        dock.persistent-apps = [
-          "/Applications/Google Chrome.app"
-        ];
-        finder.FXPreferredViewStyle = "clmv";
+        dock = {
+	        autohide = true;
+          orientation = "left";
+	        tilesize = 36;
+	        wvous-tr-corner = 4;
+          persistent-apps = [
+            # "/Applications/Google Chrome.app"
+          ];
+	      };
+
         loginwindow.GuestEnabled = false;
+        WindowManager.EnableStandardClickToShowDesktop = false;
+        finder = {
+          FXDefaultSearchScope = "SCcf";
+                FXPreferredViewStyle = "clmv";
+          ShowPathbar = true;
+          FXEnableExtensionChangeWarning = false;
+        };
+
+        # settings = {
+        #   "com.apple.menuextra.battery" = {
+        #     ShowPercent = "YES";
+        #   };
+        # };
       };
+
+      # targets.darwin.defaults."com.apple.menuextra.battery".ShowPercent = "YES";
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
