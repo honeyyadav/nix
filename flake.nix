@@ -6,9 +6,13 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    hashicorp-tap = {
+      url = "https://github.com/hashicorp/homebrew-tap";
+      flake = false;
+    };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, hashicorp-tap }:
   let
     configuration = { pkgs, ... }: {
 
@@ -27,17 +31,50 @@
 	        # pkgs.vscode
         ];
 
+      fonts.packages = [
+        (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+      ];
+
       homebrew = {
         enable = true;
+        brews = [
+          "zsh-autosuggestions"
+          "zsh-syntax-highlighting"
+          "mas"
+          # "fzf"
+          "bat"
+          "fd"
+          "zoxide"
+          "eza"
+          # "yazi"
+          "starship"
+          # "qbittorrent"
+          "tmux"
+          "atuin"
+          "stow"
+          "hashicorp/tap/terraform"
+        ];
         casks = [ 
             # "firefox"
-            "google-chrome"
+            # "google-chrome"
+            "the-unarchiver"
             "visual-studio-code"
             "maccy"
             "raycast"
             "hiddenbar"
             "itsycal"
+            "tailscale"
+            "iterm2"
+            "appcleaner"
+            "iina"
+            # "pixelsnap"
+            "transmission"
+            "ghostty"
+            "warp"
         ];
+        masApps = {
+          "Dropover" = 1355679052;
+        };
         onActivation.cleanup = "zap";
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
@@ -58,6 +95,8 @@
           ];
 	      };
 
+        controlcenter.BatteryShowPercentage = true;
+
         loginwindow.GuestEnabled = false;
         WindowManager.EnableStandardClickToShowDesktop = false;
         finder = {
@@ -67,11 +106,6 @@
           FXEnableExtensionChangeWarning = false;
         };
 
-        # settings = {
-        #   "com.apple.menuextra.battery" = {
-        #     ShowPercent = "YES";
-        #   };
-        # };
       };
 
       # targets.darwin.defaults."com.apple.menuextra.battery".ShowPercent = "YES";
@@ -91,6 +125,10 @@
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
+      security.pam.enableSudoTouchIdAuth = true;
+      users.users.honeyyadav.home = "/Users/honeyyadav";
+      nix.configureBuildUsers = true;
+      nix.useDaemon = true;
     };
   in
   {
@@ -114,11 +152,12 @@
             autoMigrate = true;
 
             # Optional: Declarative tap management
-            # taps = {
-            #   "homebrew/homebrew-core" = homebrew-core;
-            #   "homebrew/homebrew-cask" = homebrew-cask;
-            #   "homebrew/homebrew-bundle" = homebrew-bundle;
-            # };
+            taps = {
+              # "homebrew/homebrew-core" = homebrew-core;
+              # "homebrew/homebrew-cask" = homebrew-cask;
+              # "homebrew/homebrew-bundle" = homebrew-bundle;
+              "hashicorp/tap" = hashicorp-tap;
+            };
 
             # Optional: Enable fully-declarative tap management
             #

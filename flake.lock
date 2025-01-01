@@ -35,6 +35,18 @@
         "type": "github"
       }
     },
+    "hashicorp-tap": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-DmL0t9B8tflh5qsPeUTExpN25+A/E2B1qSCgBsWdHEY=",
+        "type": "file",
+        "url": "https://github.com/hashicorp/homebrew-tap"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/hashicorp/homebrew-tap"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -141,6 +153,7 @@
     },
     "root": {
       "inputs": {
+        "hashicorp-tap": "hashicorp-tap",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_3"
